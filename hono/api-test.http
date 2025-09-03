@@ -1,0 +1,12 @@
+### サーバー稼働確認
+GET http://localhost:3000/
+
+### ログイン認証（成功例）
+# `username`と`password`は、`auth.ts`で使われているダミーのユーザー情報に合わせてください。
+POST http://localhost:3000/token
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "pass1"
+}
