@@ -2,7 +2,7 @@ import { AbstractUserCrud, userCrud } from "./crud.js";
 import type { Token, User } from "./schema.js";
 import { sign, verify } from "hono/jwt";
 
-const TOKEN_EXPIRATION_MINUTES = 5;
+const TOKEN_EXPIRATION_MINUTES = 525600;
 
 if (!process.env.SECRET) {
   throw new Error("SECRET environment variable is not set.");

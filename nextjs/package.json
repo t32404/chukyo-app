@@ -10,8 +10,13 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcrypt": "^6.0.0",
     "hono": "^4.9.5",
+    "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
+    "mysql2": "^3.14.4",
     "next": "^15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
