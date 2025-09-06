@@ -43,3 +43,9 @@ export interface JwtPayload {
   userId: number;
   username: string;
 }
+
+declare module 'hono' {
+  interface ContextVariableMap {
+    user: JwtPayload;
+  }
+}

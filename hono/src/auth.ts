@@ -4,11 +4,11 @@ import { sign, verify } from "hono/jwt";
 
 const TOKEN_EXPIRATION_MINUTES = 525600;
 
-if (!process.env.SECRET) {
-  throw new Error("SECRET environment variable is not set.");
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is not set.");
 }
 
-const SECRET = process.env.SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 function getTokenExp() {
     return Math.floor(Date.now() / 1000) + 60 * TOKEN_EXPIRATION_MINUTES;
@@ -86,7 +86,7 @@ class JWTAuthService extends AbstractAuthService {
             sub: user.username,
             exp: getTokenExp(),
         };
-        const token = await sign(payload, SECRET);
+        const token = await sign(payload, JWT_SECRET);
         return token;
     }
 
@@ -109,7 +109,7 @@ class JWTAuthService extends AbstractAuthService {
     }
 
     private async getPayload(token: string): Promise<Token> {
-        return (await verify(token, SECRET)) as Token;
+        return (await verify(token, JWT_SECRET)) as Token;
     }
 }
 
