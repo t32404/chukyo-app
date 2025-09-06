@@ -1,5 +1,6 @@
 import type { User } from "./schema.js";
-var mysql = require('mysql2/promise');
+// var mysql = require('mysql2/promise');
+import * as mysql from 'mysql2/promise';
 
 let client
 
