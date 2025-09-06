@@ -1,8 +1,21 @@
 import type { User } from "./schema.js";
+var mysql = require('mysql2/promise');
+
+let client
 
 export abstract class AbstractUserCrud {
   abstract getAllUsers(): Promise<User[]>;
   abstract getUserByUsername(username: string): Promise<User | undefined>;
+}
+
+const createConnection = async() => {
+  client = await mysql.createConnection({
+  host: "163.44.123.178",
+  port: 3306,
+  user: "memoria",
+  password: "daBJ&#sq2NF2xxoV",
+  database: "memoria"
+})
 }
 
 class DummyUserCrud extends AbstractUserCrud {
