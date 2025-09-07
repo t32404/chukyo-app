@@ -30,7 +30,7 @@ const CommentOverlay: React.FC<CommentOverlayProps> = ({ onAddCommentRef }) => {
         const randomTop = Math.random() * (containerHeight - 100) + 50;
 
         // ランダムな速度を生成（1-3秒で画面を横断）
-        const randomSpeed = Math.random() * 2 + 1;
+        const randomSpeed = Math.random() * 2 + 4;
 
         const newComment: Comment = {
             id: `comment-${++commentIdCounter.current}`,
@@ -93,7 +93,7 @@ const CommentOverlay: React.FC<CommentOverlayProps> = ({ onAddCommentRef }) => {
                         transform: translateX(0);
                     }
                     to {
-                        transform: translateX(-120vw);
+                        transform: translateX(-200vw);
                     }
                 }
 

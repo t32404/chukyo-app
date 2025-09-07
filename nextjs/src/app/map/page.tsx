@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, RefObject } from "react";
 import { useMapEvents } from "react-leaflet";
 import CommentOverlay from "../../components/CommentOverlay";
 
@@ -48,7 +48,7 @@ export default function MapSelectPage() {
                     attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
                     url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                 />
-                <MapPin />
+                <MapPin addCommentRef={addCommentRef} />
             </MapContainer>
 
             {/* コメントオーバーレイ */}
@@ -57,30 +57,11 @@ export default function MapSelectPage() {
                     addCommentRef.current = addCommentFn;
                 }}
             />
-
-            {/* テスト用のコメント追加ボタン */}
-            <div className="absolute top-4 left-4 space-y-2" style={{ zIndex: 10000 }}>
-                <button
-                    onClick={() => addCommentRef.current?.("こんにちは！")}
-                    className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 block"
-                >
-                    コメント1
-                </button>
-                <button
-                    onClick={() => addCommentRef.current?.("ニコニコ動画みたい！")}
-                    className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 block"
-                >
-                    コメント2
-                </button>
-                <button onClick={() => addCommentRef.current?.("すごいね〜")} className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 block">
-                    コメント3
-                </button>
-            </div>
         </div>
     );
 }
 
-function MapPin() {
+function MapPin({ addCommentRef }: { addCommentRef: RefObject<((comment: string) => void) | null> }) {
     const router = useRouter();
 
     const [selectedPosition, setSelectedPosition] = useState<[number, number] | null>(null);
@@ -120,7 +101,10 @@ function MapPin() {
             console.log("画面左下の緯度経度:", bottomLeft.lat, bottomLeft.lng);
 
             // 中央の緯度経度
-            console.log("中央の緯度経度:", center.lat, center.lng);
+          console.log("中央の緯度経度:", center.lat, center.lng);
+            if (addCommentRef.current) {
+                addCommentRef.current(`中央の緯度経度: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
+            }
         },
     });
 
