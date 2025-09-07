@@ -56,7 +56,7 @@ export default function LoginPage() {
 
             // トークンを安全に保存
             localStorage.setItem("loginToken", data.token);
-            
+
             // マップページに遷移
             router.replace("/map");
         } catch (error) {
@@ -100,8 +100,8 @@ export default function LoginPage() {
                             autoComplete="current-password"
                         />
                     </div>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-300 disabled:cursor-not-allowed"
                         disabled={isLoading}
                     >

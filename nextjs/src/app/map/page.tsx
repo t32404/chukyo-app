@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useMapEvents } from "react-leaflet";
+import CommentOverlay from "../../components/CommentOverlay";
 
 // SSRを無効にしてLeafletマップを動的インポート
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false });
@@ -12,6 +13,8 @@ const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), 
 const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false });
 
 export default function MapSelectPage() {
+    const addCommentRef = useRef<((comment: string) => void) | null>(null);
+
     useEffect(() => {
         // Leafletのデフォルトアイコンを修正
         if (typeof window !== "undefined") {
@@ -27,8 +30,19 @@ export default function MapSelectPage() {
         }
     }, []);
 
+    // グローバルなaddComment関数をwindowオブジェクトに追加
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            (window as unknown as { addComment: (comment: string) => void }).addComment = (comment: string) => {
+                if (addCommentRef.current) {
+                    addCommentRef.current(comment);
+                }
+            };
+        }
+    }, []);
+
     return (
-        <div style={{ height: "100vh", width: "100%", overflow: "hidden" }}>
+        <div style={{ height: "100vh", width: "100%", overflow: "hidden", position: "relative" }}>
             <MapContainer center={[35.681236, 139.767125]} zoom={8} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
                     attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
@@ -36,6 +50,32 @@ export default function MapSelectPage() {
                 />
                 <MapPin />
             </MapContainer>
+
+            {/* コメントオーバーレイ */}
+            <CommentOverlay
+                onAddCommentRef={(addCommentFn) => {
+                    addCommentRef.current = addCommentFn;
+                }}
+            />
+
+            {/* テスト用のコメント追加ボタン */}
+            <div className="absolute top-4 left-4 space-y-2" style={{ zIndex: 10000 }}>
+                <button
+                    onClick={() => addCommentRef.current?.("こんにちは！")}
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 block"
+                >
+                    コメント1
+                </button>
+                <button
+                    onClick={() => addCommentRef.current?.("ニコニコ動画みたい！")}
+                    className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 block"
+                >
+                    コメント2
+                </button>
+                <button onClick={() => addCommentRef.current?.("すごいね〜")} className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 block">
+                    コメント3
+                </button>
+            </div>
         </div>
     );
 }
@@ -62,6 +102,25 @@ function MapPin() {
         // 位置情報を取得するところ
         locationfound: (location) => {
             console.log("location found:", location);
+        },
+
+        moveend: (e) => {
+            console.log("map moveend:", e);
+
+            // 地図の境界を取得
+            const bounds = map.getBounds();
+            const center = map.getCenter();
+
+            // 画面右上の緯度経度
+            const topRight = bounds.getNorthEast();
+            console.log("画面右上の緯度経度:", topRight.lat, topRight.lng);
+
+            // 画面左下の緯度経度
+            const bottomLeft = bounds.getSouthWest();
+            console.log("画面左下の緯度経度:", bottomLeft.lat, bottomLeft.lng);
+
+            // 中央の緯度経度
+            console.log("中央の緯度経度:", center.lat, center.lng);
         },
     });
 
