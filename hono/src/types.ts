@@ -35,6 +35,10 @@ export interface ApiResponse {
   message?: string;
 }
 
+export interface PinsResponse extends ApiResponse {
+  contents?: string[];
+}
+
 export interface LoginResponse {
   token: string;
 }
@@ -42,6 +46,20 @@ export interface LoginResponse {
 export interface JwtPayload {
   userId: number;
   username: string;
+}
+
+export interface MapBounds {
+  latMin: number;
+  latMax: number;
+  lngMin: number;
+  lngMax: number;
+}
+
+export interface GetPinsQuery {
+  latMin: string;
+  latMax: string;
+  lngMin: string;
+  lngMax: string;
 }
 
 declare module 'hono' {

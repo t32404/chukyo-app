@@ -89,6 +89,64 @@ async function authenticate(c: any, next: any) {
 }
 
 // 思い出登録API
+// ピン取得API
+app.get('/pins', async (c) => {
+  try {
+    const query = c.req.query();
+    const { latMin, latMax, lngMin, lngMax } = query;
+
+    // パラメータの検証
+    if (!latMin || !latMax || !lngMin || !lngMax) {
+      return c.json({
+        status: 'Error',
+        message: 'latMin, latMax, lngMin, lngMaxは必須です'
+      }, 400);
+    }
+
+    // 数値変換と範囲チェック
+    const bounds = {
+      latMin: parseFloat(latMin),
+      latMax: parseFloat(latMax),
+      lngMin: parseFloat(lngMin),
+      lngMax: parseFloat(lngMax)
+    };
+
+    // 緯度の範囲チェック (-90 to 90)
+    if (isNaN(bounds.latMin) || isNaN(bounds.latMax) ||
+        bounds.latMin < -90 || bounds.latMin > 90 || 
+        bounds.latMax < -90 || bounds.latMax > 90 || 
+        bounds.latMin > bounds.latMax) {
+      return c.json({
+        status: 'Error',
+        message: '緯度の範囲が無効です'
+      }, 400);
+    }
+
+    // 経度の範囲チェック (-180 to 180)
+    if (isNaN(bounds.lngMin) || isNaN(bounds.lngMax) ||
+        bounds.lngMin < -180 || bounds.lngMin > 180 || 
+        bounds.lngMax < -180 || bounds.lngMax > 180) {
+      return c.json({
+        status: 'Error',
+        message: '経度の範囲が無効です'
+      }, 400);
+    }
+
+    const contents = await PinService.getPinContentsInBounds(bounds);
+    return c.json({
+      status: 'OK',
+      contents
+    });
+
+  } catch (error) {
+    console.error('Error fetching pin contents:', error);
+    return c.json({
+      status: 'Error',
+      message: 'ピンの取得中にエラーが発生しました'
+    }, 500);
+  }
+});
+
 app.post('/memories', authenticate, async (c) => {
   try {
     const { lat, lng, content } = await c.req.json();
