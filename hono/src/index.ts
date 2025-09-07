@@ -98,7 +98,7 @@ app.post('/memories', authenticate, async (c) => {
       return c.json({ status: 'Error', message: '緯度、経度、コンテンツは必須です' }, 400);
     }
 
-    await PinService.createMemory(user.userId, lat, lng, content);
+    await PinService.createPin(user.userId, lat, lng, content);
     return c.json({ status: 'OK' });
   } catch (error) {
     console.error('Pin creation error:', error);
