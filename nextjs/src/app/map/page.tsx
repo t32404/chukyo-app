@@ -102,21 +102,26 @@ function MapPin({ addCommentRef }: { addCommentRef: RefObject<((comment: string)
 
             // 中央の緯度経度
             console.log("中央の緯度経度:", center.lat, center.lng);
-            if (addCommentRef.current) {
-                addCommentRef.current(`中央の緯度経度: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
-                (async () => {
-                    const res = await fetch(
-                        `http://localhost:3030/pins?latMin=${bottomLeft.lat}&latMax=${topRight.lat}&lngMin=${bottomLeft.lng}&lngMax=${topRight.lng}`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem("loginToken") || ""}`,
-                            },
+            (async () => {
+                const res = await fetch(
+                    `http://localhost:3030/pins?latMin=${bottomLeft.lat}&latMax=${topRight.lat}&lngMin=${bottomLeft.lng}&lngMax=${topRight.lng}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("loginToken") || ""}`,
+                        },
+                    }
+                );
+                const data = (await res.json()) as { status: string; contents: string[] };
+                console.log("Fetched pins:", data);
+
+                data.contents.forEach((content) => {
+                    setTimeout(() => {
+                        if (addCommentRef.current) {
+                            addCommentRef.current(content);
                         }
-                    );
-                    const data = await res.json();
-                    console.log("Fetched pins:", data);
-                })();
-            }
+                    }, Math.random() * 2000); // 0〜5秒のランダムな遅延
+                });
+            })();
         },
     });
 
