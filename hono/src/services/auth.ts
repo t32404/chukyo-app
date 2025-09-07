@@ -12,14 +12,14 @@ export class AuthService {
   static async register(username: string, password: string): Promise<void> {
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query(
-      'INSERT INTO users (username, password) VALUES (?, ?)',
+      'INSERT INTO users (name, password) VALUES (?, ?)',
       [username, hashedPassword]
     );
   }
 
   static async validateUser(username: string, password: string): Promise<User | null> {
     const [rows] = await pool.query<UserRow[]>(
-      'SELECT * FROM users WHERE username = ?',
+      'SELECT * FROM users WHERE name = ?',
       [username]
     );
 
@@ -44,7 +44,7 @@ export class AuthService {
 
   static async getUserByUsername(username: string): Promise<User | null> {
     const [rows] = await pool.query<UserRow[]>(
-      'SELECT * FROM users WHERE username = ?',
+      'SELECT * FROM users WHERE name = ?',
       [username]
     );
     return rows.length > 0 ? rows[0] : null;
