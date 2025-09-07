@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function LoginPage() {
     const [username, setUsername] = useState<string>("");
@@ -107,6 +108,13 @@ export default function LoginPage() {
                         {isLoading ? "ログイン中..." : "ログイン"}
                     </button>
                 </form>
+
+                <div className="mt-6 text-center text-sm text-gray-600">
+                    登録していないユーザーは
+                    <Link href="/register" className="text-blue-600 hover:text-blue-700 transition-colors ml-1">
+                        こちらから登録
+                    </Link>
+                </div>
             </div>
         </div>
     );
