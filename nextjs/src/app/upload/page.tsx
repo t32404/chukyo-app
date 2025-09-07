@@ -39,13 +39,18 @@ export default function UploadPage() {
                     Authorization: `Bearer ${localStorage.getItem("loginToken") || ""}`,
                 },
                 body: JSON.stringify({
-                    ido: lat,
-                    keido: lng,
-                    content: textContent,
+                    ido: 35.681236,
+                    keido: 139.767125,
+                    content: "東京駅での思い出",
                 }),
             });
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    setError("認証エラーです。再度ログインしてください。");
+                    router.push("/login");
+                    return;
+                }
                 throw new Error("サーバーエラーが発生しました。");
             }
 
