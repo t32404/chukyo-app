@@ -29,10 +29,10 @@ export default function MapSelectPage() {
 
     return (
         <div style={{ height: "100vh", width: "100%", overflow: "hidden" }}>
-            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
+            <MapContainer center={[34.9961, 137.1147]} zoom={8} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+                    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                 />
                 <MapPin />
             </MapContainer>
@@ -70,16 +70,16 @@ function MapPin() {
             {selectedPosition && (
                 <Marker position={selectedPosition}>
                     <Popup>
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 p-3 bg-white rounded-lg shadow-lg z-50 text-center">
+                        <div className="p-2 text-center">
                             <p className="text-sm font-semibold mb-2">
                                 選択された位置:
                                 <br /> {selectedPosition[0].toFixed(4)}, {selectedPosition[1].toFixed(4)}
                             </p>
                             <button
                                 onClick={handleConfirmLocation}
-                                className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+                                className="bg-blue-500 text-white font-bold py-1 px-3 rounded-full shadow-md hover:bg-blue-600 transition-colors text-sm"
                             >
-                                この場所で建物を建てる
+                                この場所に建物を建てる
                             </button>
                         </div>
                     </Popup>
