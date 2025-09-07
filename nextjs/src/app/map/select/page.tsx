@@ -29,7 +29,7 @@ export default function MapSelectPage() {
 
     return (
         <div style={{ height: "100vh", width: "100%", overflow: "hidden" }}>
-            <MapContainer center={[34.9961, 137.1147]} zoom={8} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
+            <MapContainer center={[35.681236, 139.767125]} zoom={8} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
                     attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
                     url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
