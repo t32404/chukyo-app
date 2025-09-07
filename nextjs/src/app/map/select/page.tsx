@@ -52,11 +52,14 @@ function MapPin() {
     };
 
     const map = useMapEvents({
+        // クリック時の動作
         click: (e) => {
             map.locate();
             console.log(e.latlng);
             setSelectedPosition([e.latlng.lat, e.latlng.lng]);
         },
+
+        // 位置情報を取得するところ
         locationfound: (location) => {
             console.log("location found:", location);
         },
