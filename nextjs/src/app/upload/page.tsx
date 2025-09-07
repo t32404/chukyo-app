@@ -39,9 +39,9 @@ export default function UploadPage() {
                     Authorization: `Bearer ${localStorage.getItem("loginToken") || ""}`,
                 },
                 body: JSON.stringify({
-                    ido: 35.681236,
-                    keido: 139.767125,
-                    content: "東京駅での思い出",
+                    lat,
+                    lng,
+                    content: textContent,
                 }),
             });
 
@@ -51,7 +51,8 @@ export default function UploadPage() {
                     router.push("/login");
                     return;
                 }
-                throw new Error("サーバーエラーが発生しました。");
+                const errorData = await response.json();
+                throw new Error(errorData.message || "サーバーエラーが発生しました。");
             }
 
             const data = await response.json();
@@ -59,7 +60,7 @@ export default function UploadPage() {
             router.push("/map");
         } catch (error: unknown) {
             console.error("投稿に失敗しました:", error);
-            setError("投稿に失敗しました。サーバーが起動しているか確認してください。");
+            setError(`投稿に失敗しました。${error instanceof Error ? error.message : ""}`);
             setIsProcessing(false);
         }
     };
