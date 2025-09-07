@@ -106,7 +106,12 @@ function MapPin({ addCommentRef }: { addCommentRef: RefObject<((comment: string)
                 addCommentRef.current(`中央の緯度経度: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
                 (async () => {
                     const res = await fetch(
-                        `http://localhost:3030/pins?latMin=${bottomLeft.lat}&latMax=${topRight.lat}&lngMin=${bottomLeft.lng}&lngMax=${topRight.lng}`
+                        `http://localhost:3030/pins?latMin=${bottomLeft.lat}&latMax=${topRight.lat}&lngMin=${bottomLeft.lng}&lngMax=${topRight.lng}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("loginToken") || ""}`,
+                            },
+                        }
                     );
                     const data = await res.json();
                     console.log("Fetched pins:", data);
