@@ -16,7 +16,7 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 w-full max-w-xl px-4 sm:px-0">
-                <Link href="/map" className="w-full">
+                <Link href="/login" className="w-full">
                     <button className="w-full bg-gray-300 text-gray-900 font-bold py-4 px-8 rounded-full shadow-lg hover:bg-gray-400 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 whitespace-nowrap">
                         みんなの地図を見る
                     </button>
