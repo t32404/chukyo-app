@@ -14,25 +14,14 @@ export default function Home() {
         </p>
       </div>
 
-      {/* コンセプトイメージのイラスト */}
-      <div className="mb-12 w-full max-w-lg">
-        <Image
-          src="/images/concept-art.png"
-          alt="アプリのコンセプトアート"
-          width={500}
-          height={300}
-          style={{ objectFit: 'contain' }}
-        />
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm px-4">
+      <div className="flex flex-col sm:flex-row gap-6 w-full max-w-xl px-4 sm:px-0">
         <Link href="/map/select" className="w-full">
-          <button className="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-600 transition-colors transform hover:scale-105">
+          <button className="w-full bg-blue-600 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:bg-blue-700 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 whitespace-nowrap">
             新しい地図を作る
           </button>
         </Link>
         <Link href="/map" className="w-full">
-          <button className="w-full bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-full shadow-lg hover:bg-gray-300 transition-colors transform hover:scale-105">
+          <button className="w-full bg-gray-300 text-gray-900 font-bold py-4 px-8 rounded-full shadow-lg hover:bg-gray-400 transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 whitespace-nowrap">
             みんなの地図を見る
           </button>
         </Link>
