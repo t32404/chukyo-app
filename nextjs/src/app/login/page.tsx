@@ -2,23 +2,34 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function LoginPage() {
-    const [userid, setUserid] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const authEndpoint = "http://localhost:3030/token";
+    const authEndpoint = "http://localhost:3030/login";
 
     const router = useRouter();
 
+    // ログイン済みの場合はマップページにリダイレクト
+    useEffect(() => {
+        const token = localStorage.getItem("loginToken");
+        if (token) {
+            router.push("/map");
+        }
+    }, [router]);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         setError("");
+        setIsLoading(true);
 
-        if (!userid || !password) {
-            setError("ユーザーIDとパスワードを入力してください。");
+        if (!username || !password) {
+            setError("ユーザー名とパスワードを入力してください。");
+            setIsLoading(false);
             return;
         }
 
@@ -28,26 +39,30 @@ export default function LoginPage() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username: userid, password }),
+                body: JSON.stringify({ username, password }),
+                credentials: "include",
             });
-
-            if (!response.ok) {
-                throw new Error("ログインに失敗しました。ユーザーIDまたはパスワードが正しくありません。");
-            }
 
             const data = await response.json();
 
-            if (!data.token) {
-                throw new Error("ログインに失敗しました。トークンの取得ができません。");
+            if (!response.ok) {
+                throw new Error(data.message || "ログインに失敗しました。");
             }
 
-            console.log("ログイン成功:", data);
-            alert("ログイン成功！");
-            // ログイン成功後の処理をここに追加
-            window.localStorage.setItem("loginToken", data.token);
-            router.push("/map");
+            if (!data.token) {
+                throw new Error("トークンの取得に失敗しました。");
+            }
+
+            // トークンを安全に保存
+            localStorage.setItem("loginToken", data.token);
+            
+            // マップページに遷移
+            router.replace("/map");
         } catch (error) {
+            console.error("Login error:", error);
             setError(error instanceof Error ? error.message : "予期しないエラーが発生しました。");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -58,16 +73,17 @@ export default function LoginPage() {
                 {error && <p className="mb-4 text-center text-red-500 font-medium">{error}</p>}
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label htmlFor="userid" className="block text-sm font-medium text-black-700 mb-1">
-                            ユーザーID
+                        <label htmlFor="username" className="block text-sm font-medium text-black-700 mb-1">
+                            ユーザー名
                         </label>
                         <input
                             type="text"
-                            id="userid"
-                            value={userid}
-                            onChange={(e) => setUserid(e.target.value)}
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
                             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             autoComplete="username"
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
@@ -83,8 +99,12 @@ export default function LoginPage() {
                             autoComplete="current-password"
                         />
                     </div>
-                    <button type="submit" className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">
-                        ログイン
+                    <button 
+                        type="submit" 
+                        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-300 disabled:cursor-not-allowed"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "ログイン中..." : "ログイン"}
                     </button>
                 </form>
             </div>
