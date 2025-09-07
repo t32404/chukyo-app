@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
 import { AuthService } from './services/auth.js';
-import { MemoryService } from './services/memory.js';
+import { PinService } from './services/pin.js';
 
 const app = new Hono()
 
@@ -98,11 +98,11 @@ app.post('/memories', authenticate, async (c) => {
       return c.json({ status: 'Error', message: '緯度、経度、コンテンツは必須です' }, 400);
     }
 
-    await MemoryService.createMemory(user.userId, lat, lng, content);
+    await PinService.createMemory(user.userId, lat, lng, content);
     return c.json({ status: 'OK' });
   } catch (error) {
-    console.error('Memory creation error:', error);
-    return c.json({ status: 'Error', message: '思い出の作成中にエラーが発生しました' }, 500);
+    console.error('Pin creation error:', error);
+    return c.json({ status: 'Error', message: 'ピンの作成中にエラーが発生しました' }, 500);
   }
 });
 

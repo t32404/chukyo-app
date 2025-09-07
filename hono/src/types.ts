@@ -5,11 +5,11 @@ export interface User {
   created_at: Date;
 }
 
-export interface Memory {
+export interface Pin {
   id: number;
-  user_id: number;
-  lat: number;
-  lng: number;
+  userid: number;
+  ido: number;
+  keido: number;
   content: string;
   created_at: Date;
 }
@@ -24,9 +24,9 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface CreateMemoryRequest {
-  lat: number;
-  lng: number;
+export interface CreatePinRequest {
+  ido: number;
+  keido: number;
   content: string;
 }
 
